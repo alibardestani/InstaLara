@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -23,7 +25,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::all();
+        return view('post.create', compact('categories'));
     }
 
     /**
@@ -31,7 +34,30 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'title' => 'required',
+            'content' => 'required',
+            'category_id' => 'required|exists:categories,id',
+            'published_at' => 'nullable|date',
+        ]);
+
+        $image = $request->file('image');
+        unset($data['image']);
+        $data['user_id'] = Auth::id();
+        $data['slug'] = Str::slug($data['title']);
+
+        if ($image) {
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $path = storage_path('app/public/images/' . $imageName);
+            $image->move(storage_path('app/public/images'), $imageName);
+            $data['image'] = $imageName;
+        }
+
+        Post::create($data);
+
+
+        return redirect()->route('dashboard')->with('success', 'Post created successfully.');
     }
 
     /**
