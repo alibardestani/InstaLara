@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Category;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,17 +19,13 @@ class PostFactory extends Factory
      */
     public function definition(): array
     {
-        User::factory()->create([
-            'name' => $this->faker->name(),
-            'email' => $this->faker->unique()->safeEmail(),
-        ]);
         return [
             'title' => $this->faker->sentence(),
             'image' => $this->faker->imageUrl(),
             'slug' => $this->faker->slug(),
             'content' => $this->faker->paragraph(5),
-            'published_at' => $this->faker->date(),
-            'user_id' => 1,
+            'published_at' => Carbon::createFromFormat('Y-m-d', '1999-03-22')->toDateTimeString(),
+            'user_id' => User::factory(),
             'category_id' => Category::all()->random()->id,
         ];
     }
