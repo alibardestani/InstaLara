@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicProfileController;
@@ -13,6 +14,8 @@ Route::middleware(['auth', 'verified'])->group(callback: function () {
     Route::post('/post/create', [PostController::class,'store'])
         ->name('posts.store');
     Route::get('/@{username}/{post:slug}', [PostController::class, 'show'])->name('posts.show');
+    Route::post('/follow/{user}', [FollowerController::class, 'followUnfollow'])
+        ->name('follow');
 });
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
