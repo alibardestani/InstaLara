@@ -34,6 +34,8 @@
                         </div>
                 </div>
 
+                <x-clap-button :post="$post"/>
+
 
 
                 <div class="mt-8">
@@ -53,7 +55,7 @@
                     </span>
                 </div>
 
-                <x-clap-button/>
+
             </div>
         </div>
     </div>
