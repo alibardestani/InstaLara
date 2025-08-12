@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth', 'verified'])->group(callback: function () {
     Route::get('/', [PostController::class,'index'])
         ->name('dashboard');
+    Route::get('/category/{category}', [PostController::class,'category'])
+        ->name('post.byCategory');
     Route::get('/post/create', [PostController::class,'create'])
         ->name('posts.create');
     Route::post('/post/create', [PostController::class,'store'])
